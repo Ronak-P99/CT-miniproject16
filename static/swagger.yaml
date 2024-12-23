@@ -1,0 +1,548 @@
+swagger: '2.0'
+info:
+  title: "E-commerce API"
+  description: "This is an API to manage an E-commerce application"
+  version: "1.0.0"
+host: "127.0.0.1:5000"
+schemes:
+  - "http"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+securityDefinitions:
+  bearerAuth:
+    type: apiKey
+    name: Authorization
+    in: header
+paths: 
+  /accounts/login:
+    post:
+      tags:
+        - accounts
+      summary: "login endpoint"
+      description: "Endpoint for user authentication."
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Credentials for login"
+          required: true
+          schema:
+            $ref: "#/definitions/LoginCredentials"
+      responses:
+        200:
+          description: "Login successful"
+          schema:
+            $ref: "#/definitions/LoginResponse"
+          examples:
+            application/json:
+              value:
+                auth_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...."
+                message: "Login successful"
+                status: "success"
+        400:
+          description: "Bad request"
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              value:
+                status: "error"
+                message: "invalid credentials"
+  /customers:
+    get:
+      tags:
+        - customers
+      summary: "Get ALL Customers"
+      description: "Retrieve a list of all customers"
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Customer"
+      security:
+        -bearerAuth: []
+        400:
+          description: "Bad request"
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              value:
+                status: "error"
+                message: "invalid status value"
+    post:
+      tags:
+        - customers
+      summary: "Post Customer"
+      description: "Post a customer"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Customer data"
+          required: true
+          schema: 
+            $ref: "#/definitions/Customer"
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: "object"
+            items:
+              $ref: "#/definitions/Customer"
+        405:
+          description: "Method Not allowed"
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              value:
+                status: "error"
+                message: "invalid input"
+  /customers/gmail:
+    get:
+      tags:
+        - customers
+      summary: "Gmail in email"
+      description: "Retrieve a list of all customers with gmail in email"
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Customer"
+      security:
+        -bearerAuth: []
+        400:
+          description: "Bad request"
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              value:
+                status: "error"
+                message: "invalid status value"
+  /customers/paginate:
+    get:
+      tags:
+        - customers
+      summary: "Customers pages"
+      description: "Retrieve customers depending on pages you want"
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Customer"
+      security:
+        -bearerAuth: []
+        400:
+          description: "Bad request"
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              value:
+                status: "error"
+                message: "invalid status value"
+  /customers/price-total:
+    get:
+      tags:
+        - customers
+      summary: "Get Customers, Price of Product, and Order ID"
+      description: "Retrieve a list of all customers with the Price of Product and Order ID"
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Customer"
+      security:
+        -bearerAuth: []
+        400:
+          description: "Bad request"
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              value:
+                status: "error"
+                message: "invalid status value"
+  /employees:
+    get:
+      tags:
+        - employees
+      summary: "Get ALL Employees"
+      description: "Retrieve a list of all employees"
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Employee"
+      security:
+        -bearerAuth: []
+    post:
+      tags:
+        - employees
+      summary: "Post Employee"
+      description: "Post a employee"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Employee data"
+          required: true
+          schema: 
+            $ref: "#/definitions/Employee"
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: "object"
+            items:
+              $ref: "#/definitions/Employee"
+  /employees/production-report:
+    get:
+      tags:
+        - employees
+      summary: "Get ALL Employees Production"
+      description: "Retrieve a list of all employees name and total quantity"
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Employee"
+      security:
+        -bearerAuth: []
+  /orders:
+    get:
+      tags:
+        - orders
+      summary: "Get ALL Orders"
+      description: "Retrieve a list of all orders"
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Order"
+      security:
+        -bearerAuth: []
+    post:
+      tags:
+        - orders
+      summary: "Post Order"
+      description: "Post a order"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Order data"
+          required: true
+          schema: 
+            $ref: "#/definitions/Order"
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: "object"
+            items:
+              $ref: "#/definitions/Order"
+  /orders/id/<int:id>:
+    get:
+      tags:
+        - orders
+      summary: "Get One Order"
+      description: "Retrieve a specific order by searching with the ID"
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Order"
+      security:
+        -bearerAuth: []
+  /orders/paginate:
+    get:
+      tags:
+        - orders
+      summary: "Orders pages"
+      description: "Retrieve orders depending on pages you want"
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Order"
+  /products:
+    get:
+      tags:
+        - products
+      summary: "Get ALL Products"
+      description: "Retrieve a list of all products"
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Product"
+      security:
+        -bearerAuth: []
+    post:
+      tags:
+        - products
+      summary: "Post Product"
+      description: "Post a product"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Product data"
+          required: true
+          schema: 
+            $ref: "#/definitions/Product"
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: "object"
+            items:
+              $ref: "#/definitions/Product"
+  /products/paginate:
+    get:
+      tags:
+        - products
+      summary: "Products pages"
+      description: "Retrieve products depending on pages you want"
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Product"
+  /products/product-max:
+    get:
+      tags:
+        - products
+      summary: "Total products ordered"
+      description: "Retrieve product names and total quantity ordered of that product"
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Product"
+  /productions:
+    get:
+      tags:
+        - productions
+      summary: "Get ALL Productions"
+      description: "Retrieve a list of all productions"
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Production"
+      security:
+        -bearerAuth: []
+    post:
+      tags:
+        - productions
+      summary: "Post Production"
+      description: "Post a production"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Production data"
+          required: true
+          schema: 
+            $ref: "#/definitions/Production"
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: "object"
+            items:
+              $ref: "#/definitions/Production"
+  /productions/quantity-dates:
+    get:
+      tags:
+        - productions
+      summary: "Range of when total products ordered"
+      description: "Retrieve product names and total quantity ordered of that product within certain range of dates"
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Production"
+definitions: 
+  LoginCredentials:
+      type: "object"
+      properties:
+        username:
+          type: "string"
+          description: "Username"
+        password:
+          type: "string"
+          format: "password"
+          description: "Password"
+      required:
+        - "username" 
+        - "password"
+  LoginResponse:
+    type: "object"
+    properties:
+      auth_token:
+        type: "string"
+        description: "Authentication token"
+      message:
+        type: "string"
+        description: "Message indicating success or failure"
+      status:
+        type: "string"
+        description: "Status of the operation"
+    required:
+      - "auth_token"
+      - "message"
+  Error:
+    type: "object"
+    properties:
+      status:
+        type: "string"
+        description: "Status of the error"
+      message:
+        type: "string"
+        description: "Description of the error"
+    required:
+      - "status"
+      - "message"
+  Customer:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        description: "Customer's name"
+      email:
+        type: "string"
+        description: "Customer's email"
+      phone:
+        type: "string"
+        description: "Customer's phone number"
+      id:
+        type: "integer"
+        format: "int64"
+        description: "Customer's unique ID (primary key)"
+    required:
+      - "name"
+      - "email"
+      - "phone"
+      - "id"
+  Employee:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        description: "Employee's name"
+      position:
+        type: "string"
+        description: "Employee's position"
+      id:
+        type: "integer"
+        format: "int64"
+        description: "Employee's unique ID (primary key)"
+    required:
+      - "name"
+      - "position"
+      - "id"
+  Order:
+    type: "object"
+    properties:
+      date:
+        type: "date"
+        description: "Order's date"
+      customer_id:
+        type: "integer"
+        description: "Customer ID (foreign key referencing Customer.id)"
+      id:
+        type: "integer"
+        format: "int64"
+        description: "Order's unique ID (primary key)"
+    required:
+      - "date"
+      - "customer_id"
+      - "id"
+  Product:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        description: "Product's name"
+      price:
+        type: "float"
+        description: "Product's price"
+      quantity_ordered: 
+        type: "integer"
+        description: "Quantity ordered of Product"
+      order_id:
+        type: "integer"
+        description: Order ID (foreign key referencing Order.id)
+        $ref: "#/definitions/Order"
+      id:
+        type: "integer"
+        format: "int64"
+        description: "Product's unique ID (primary key)"
+    required:
+      - "name"
+      - "price"
+      - "quantity_ordered"
+      - "order_id"
+      - "id"
+  Production:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        description: "Production's name"
+      quantity_produced:
+        type: "integer"
+        description: "Product's produced during production"
+      product_id: 
+        type: "integer"
+        description: "Product ID (foreign key referencing Product.id)"
+        $ref: "#/definitions/Product"
+      employee_id:
+        type: "integer"
+        description: Employee ID (foreign key referencing Employee.id)
+        $ref: "#/definitions/Employee"
+      date:
+        type: "date"
+        description: "Production's date"
+      id:
+        type: "integer"
+        format: "int64"
+        description: "Product's unique ID"
+    required:
+      - "name"
+      - "quantity_produced"
+      - "product_id"
+      - "employee_id"
+      - "date"
+      - "id"
+    
+# "Yet Another Markup Language" => YAML
