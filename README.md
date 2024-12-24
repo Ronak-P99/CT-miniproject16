@@ -1,4 +1,4 @@
-# Module 13 Mini-Project: Advanced E-commerce API
+# Module 16 Mini-Project: Advanced E-commerce API
 Requirements:
 
 Customer and CustomerAccount: Create the CRUD (Create, Read, Update, Delete) endpoints for managing Customers and their associated CustomerAccounts:
@@ -40,3 +40,5 @@ Use the Swagger library to be able to generate project documentation
 Generate the swagger.yaml file with the documentation of each of the generated endpoints.
 
 Function: Must run and make sure to look at blueprints to figure out which endpoint does what. just need to put the local address and whatever endpoint you would like to look at!
+
+Updated: Added Render into and .github/workflows files 
